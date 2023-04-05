@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\UpdateProductRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -13,77 +15,33 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::latest()->get();
-        // return response()->json(['message' => 'success', 'data' => $products]);
         return ProductResource::collection($products);
     }
 
-    public function create()
-    {
-        //
-    }
-
-
-    public function store(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'id' => "required|max:36|unique(product)",
-            'name' => "required|max:100",
-            'price' => "required|numeric",
-            'brand' => "required|max:50",
-            'category' => "required|max:50",
-            'description' => "required",
-            'image_url' => "required|url",
-            'is_popular' => "required|boolean",
-            'quantity' => "required|numeric",
-            'sales' => "required|numeric",
-            'user_id' => "required|max:36",
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['message' => 'Fail', 'data' => $validator->errors()]);
-        } else {
-            $products = Product::create($request->all());
-            return response()->json(['message' => 'success', 'data' => new ProductResource($products)]);
-        }
-    }
-
-
     public function show($id)
     {
-        $product = Product::find($id);
+        $product = Product::findOrFail($id);
         return new ProductResource($product);
     }
 
-
-    public function edit($id)
+    public function store(StoreProductRequest $request)
     {
-        //
+        $request['seller_id'] = auth()->user()->id;
+        $product = Product::create($request->all());
+        return response()->json(['message' => 'success', 'data' => new ProductResource($product)]);
+    }
+
+    public function update(UpdateProductRequest $request, String $id)
+    {
+        $product = Product::findOrFail($id);
+        $product->update($request->except(['id', 'userId']));
+        return response()->json(['message' => 'success', 'data' => new ProductResource($product)]);
     }
 
 
-    public function update(Request $request, Product $product)
+    public function destroy(String $id)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => "max:100",
-            'price' => "numeric",
-            'brand' => "max:50",
-            'category' => "max:50",
-            'image_url' => "url",
-            'is_popular' => "boolean",
-            'quantity' => "numeric",
-            'sales' => "numeric",
-        ]);
-        if ($validator->fails()) {
-            return response()->json(['message' => 'Fail', 'data' => $validator->errors()]);
-        } else {
-            $product->update($request->except(['id', 'user_id']));
-            return response()->json(['message' => 'success', 'data' => new ProductResource($product)]);
-        }
-    }
-
-
-    public function destroy(Product $product)
-    {
+        $product = Product::findOrFail($id);
         $product->delete();
         return response()->json(['message' => 'success']);
     }
