@@ -13,6 +13,12 @@ class Product extends Model
     public $incrementing = false; //non-incrementing or non-numeric primary
 
     protected $guarded = []; // state non-fillable fields, if empty means all fields are fillable
+
+    public function seller()
+    {
+        return $this->belongsTo(User::class, 'seller_id', 'id');
+    }
+
     // protected $fillable = [
     //     'id'
     //     'name',

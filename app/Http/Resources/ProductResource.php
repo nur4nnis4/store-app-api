@@ -21,12 +21,10 @@ class ProductResource extends JsonResource
             'price' => $this->price,
             'brand' => $this->brand,
             'category' => $this->category,
-            'description' => $this->description,
             'image_url' => Storage::url('app/public/' . $this->image), //Make sure APP_URL in env file is accurate
             'is_popular' => $this->is_popular,
             'stock' => $this->stock,
             'sales' => $this->price,
-            'seller_id' => $this->price,
         ];
     }
 }

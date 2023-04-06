@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+use App\Http\Resources\ProductDetailResource;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -28,7 +29,7 @@ class ProductController extends Controller
     public function show($id)
     {
         $product = Product::findOrFail($id);
-        return new ProductResource($product);
+        return new ProductDetailResource($product->loadMissing('seller:id,name,photo_url'));
     }
 
     public function store(StoreProductRequest $request)
