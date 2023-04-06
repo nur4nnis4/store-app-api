@@ -19,9 +19,9 @@ class UpdateProductRequest extends FormRequest
             'price' => "numeric",
             'brand' => "max:50",
             'category' => "max:50",
-            'image_url' => "url",
+            'image_url' => "image",
             'is_popular' => "boolean",
-            'quantity' => "numeric",
+            'stock' => "numeric",
             'sales' => "numeric",
         ];
     }

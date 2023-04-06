@@ -14,14 +14,15 @@ class Product extends Model
 
     protected $guarded = []; // state non-fillable fields, if empty means all fields are fillable
     // protected $fillable = [
+    //     'id'
     //     'name',
     //     'price',
     //     'brand',
     //     'category',
     //     'description',
-    //     'image_url',
+    //     'image',
     //     'is_popular',
-    //     'quantity',
+    //     'stock',
     //     'sales',
     //     'seller_id',
     // ];

@@ -21,9 +21,9 @@ class StoreProductRequest extends FormRequest
             'brand' => "required|max:50",
             'category' => "required|max:50",
             'description' => "required",
-            'image_url' => "required|url",
+            'image_url' => "required|image",
             'is_popular' => "required|boolean",
-            'quantity' => "required|numeric",
+            'stock' => "required|numeric",
             'sales' => "required|numeric",
         ];
     }

@@ -13,6 +13,7 @@ Route::get('/logout', [AuthController::class, 'logout'])->middleware('auth:sanct
 Route::controller(ProductController::class)->group(function () {
     Route::get('/products', 'index');
     Route::get('/products/{id}', 'show');
+    Route::get('/products-popular', 'showPopular');
 
     Route::middleware(['auth:sanctum'])->group(function () {
 

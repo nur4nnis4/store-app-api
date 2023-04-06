@@ -26,7 +26,7 @@ class ProductFactory extends Factory
             'description' => fake()->paragraphs(4, true),
             'image_url' => fake()->imageUrl(),
             'is_popular' => fake()->numberBetween(0, 1),
-            'quantity' => fake()->randomNumber(4),
+            'stock' => fake()->randomNumber(4),
             'sales' => fake()->randomNumber(4),
             'user_id' => fake()->randomElement(User::pluck('id')),
         ];
