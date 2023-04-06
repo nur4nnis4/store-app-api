@@ -22,19 +22,14 @@ class UserFactory extends Factory
             'id' => fake()->uuid(),
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
+            'address' => fake()->address(),
             'phone_number' => fake()->unique()->phoneNumber(),
-            'email_verified_at' => now(),
             'password' => Hash::make('password'),
-            'photo_url' => fake()->imageUrl(360, 360, 'animals', true, 'dogs', true, 'jpg'),
+            'photo_path' => fake()->imageUrl(360, 360, 'animals', true, 'dogs', true, 'jpg'),
             'remember_token' => Str::random(10),
         ];
     }
 
-    /**
-     * Indicate that the model's email address should be unverified.
-     *
-     * @return static
-     */
     public function unverified()
     {
         return $this->state(fn (array $attributes) => [

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
+use App\Http\Requests\SignupRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -24,8 +25,13 @@ class AuthController extends Controller
         $request->user()->currentAccessToken()->delete();
     }
 
-    public function signup(LoginRequest $request)
+    public function signup(SignupRequest $request)
     {
-        //
+        if ($request->image_url) {
+            $filename = $request->image_url->store('users');
+            $request['photo_path'] = $filename;
+        }
+        $request['seller_id'] = auth()->user()->id;
+        $user = User::create($request->except('image_url'));
     }
 }

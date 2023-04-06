@@ -17,6 +17,11 @@ class User extends Authenticatable
     public $incrementing = false; //non-incrementing or non-numeric primary
     protected $keyType = 'string';
 
+    public function setPasswordAttribute($password)
+    {
+        $this->attributes['password'] = bcrypt($password);
+    }
+
     protected $casts = [
         'id' => 'string',
         'email_verified_at' => 'datetime',
@@ -28,11 +33,13 @@ class User extends Authenticatable
     }
 
     protected $fillable = [
+        'id',
         'name',
         'email',
+        'address',
         'phone_number',
         'password',
-        'photo_url',
+        'photo_path',
     ];
     protected $hidden = [
         'password',

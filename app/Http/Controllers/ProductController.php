@@ -48,8 +48,9 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
 
         if ($request->image_url) {
-            $extension = $request->image_url->getClientOriginalExtension();
-            $filename = $request->image_url->storeAs('products', $product->image_url . '.' . $extension);
+            if ($product->image)
+                Storage::delete($product->image);
+            $filename = $request->image_url->store('products');
             $request['image'] = $filename;
         }
         $product->update($request->except(['id', 'userId', 'image_url']));

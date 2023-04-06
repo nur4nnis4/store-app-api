@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -10,6 +11,16 @@ use Illuminate\Support\Facades\Route;
 Route::get('/login', [AuthController::class, 'login']);
 Route::get('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
+Route::controller(UserController::class)->group(function () {
+    Route::get('/users', 'index');
+    Route::get('/users/{id}', 'show');
+
+    Route::middleware(['auth:sanctum', 'account.owner'])->group(function () {
+        Route::get('/users-account/{id}', 'getUserAccount');
+        Route::patch('/users/{id}', 'update');
+        Route::delete('/users/{id}', 'destroy');
+    });
+});
 Route::controller(ProductController::class)->group(function () {
     Route::get('/products', 'index');
     Route::get('/products/{id}', 'show');
