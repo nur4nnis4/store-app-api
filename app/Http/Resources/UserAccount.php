@@ -21,8 +21,7 @@ class UserAccount extends JsonResource
             'email' => $this->email,
             'address' => $this->address,
             'phone_number' => $this->phone_number,
-            'password' => $this->password,
-            'photo_url' => $this->photo_path ? Storage::url('app/public/' . $this->photo_path) : $this->photo_path,
+            'photo_url' => $this->photo_path ? Storage::url('app/public/' . $this->photo_path) : Storage::url('app/public/default/user.jpg'),
             'joined_at' => $this->created_at,
         ];
     }

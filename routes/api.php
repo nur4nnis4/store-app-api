@@ -8,7 +8,8 @@ use Illuminate\Support\Facades\Route;
 
 // Route::apiResource('products', ProductController::class);
 
-Route::get('/login', [AuthController::class, 'login']);
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register']);
 Route::get('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
 Route::controller(UserController::class)->group(function () {

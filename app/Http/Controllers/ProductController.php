@@ -17,19 +17,19 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::latest()->get();
-        return ProductResource::collection($products);
+        return ProductResource::collection($products->loadMissing('seller:id,name,photo_path,address'));
     }
 
     public function showPopular()
     {
         $popularProducts = Product::where('is_popular', 1)->get();
-        return ProductResource::collection($popularProducts);
+        return ProductResource::collection($popularProducts->loadMissing('seller:id,name,photo_path,address'));
     }
 
     public function show($id)
     {
         $product = Product::findOrFail($id);
-        return new ProductDetailResource($product->loadMissing('seller:id,name,photo_url'));
+        return new ProductResource($product->loadMissing('seller:id,name,photo_path,address'));
     }
 
     public function store(StoreProductRequest $request)
@@ -40,7 +40,7 @@ class ProductController extends Controller
         }
         $request['seller_id'] = auth()->user()->id;
         $product = Product::create($request->except('image_url'));
-        return response()->json(['message' => 'success', 'data' => new ProductResource($product)]);
+        return response()->json(['message' => 'success', 'data' => new ProductResource($product)], 201);
     }
 
     public function update(UpdateProductRequest $request, String $id)

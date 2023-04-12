@@ -21,10 +21,12 @@ class ProductResource extends JsonResource
             'price' => $this->price,
             'brand' => $this->brand,
             'category' => $this->category,
+            'description' => $this->description,
             'image_url' => Storage::url('app/public/' . $this->image), //Make sure APP_URL in env file is accurate
-            'is_popular' => $this->is_popular,
+            'is_popular' => $this->is_popular == 1 ? true : false,
             'stock' => $this->stock,
-            'sales' => $this->price,
+            'sales' => $this->sales,
+            'seller' => new UserResource($this->whenLoaded('seller')),
         ];
     }
 }

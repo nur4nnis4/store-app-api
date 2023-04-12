@@ -32,17 +32,6 @@ class UserController extends Controller
         return new UserAccount($user);
     }
 
-    public function store(SignupRequest $request)
-    {
-        if ($request->image_url) {
-            $filename = $request->image_url->store('users');
-            $request['photo_path'] = $filename;
-        }
-        $request['seller_id'] = auth()->user()->id;
-        $user = User::create($request->except('image_url'));
-        return response()->json(['message' => 'success', 'data' => new UserResource($user)]);
-    }
-
     public function update(UpdateUserRequest $request, String $id)
     {
         $user = User::findOrFail($id);
