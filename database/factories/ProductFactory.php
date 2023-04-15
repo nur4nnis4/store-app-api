@@ -28,7 +28,7 @@ class ProductFactory extends Factory
             'is_popular' => fake()->numberBetween(0, 1),
             'stock' => fake()->randomNumber(4),
             'sales' => fake()->randomNumber(4),
-            'user_id' => fake()->randomElement(User::pluck('id')),
+            'seller_id' => fake()->randomElement(User::pluck('id')),
         ];
     }
 }

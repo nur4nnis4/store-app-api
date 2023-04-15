@@ -61,7 +61,7 @@ class ProductController extends Controller
     public function destroy(String $id)
     {
         $product = Product::findOrFail($id);
-        Storage::delete([$product->image_url]);
+        Storage::delete([$product->image]);
         $product->delete();
         return response()->json(['message' => 'success']);
     }

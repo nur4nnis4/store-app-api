@@ -24,8 +24,8 @@ class ProductResource extends JsonResource
             'description' => $this->description,
             'image_url' => Storage::url('app/public/' . $this->image), //Make sure APP_URL in env file is accurate
             'is_popular' => $this->is_popular == 1 ? true : false,
-            'stock' => $this->stock,
-            'sales' => $this->sales,
+            'stock' => (int) $this->stock,
+            'sales' => (int) $this->sales,
             'seller' => new UserResource($this->whenLoaded('seller')),
         ];
     }

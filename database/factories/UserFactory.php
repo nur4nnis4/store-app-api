@@ -24,8 +24,7 @@ class UserFactory extends Factory
             'email' => fake()->unique()->safeEmail(),
             'address' => fake()->address(),
             'phone_number' => fake()->unique()->phoneNumber(),
-            'password' => Hash::make('password'),
-            'photo_path' => fake()->imageUrl(360, 360, 'animals', true, 'dogs', true, 'jpg'),
+            'password' => 'rahasia',
             'remember_token' => Str::random(10),
         ];
     }
