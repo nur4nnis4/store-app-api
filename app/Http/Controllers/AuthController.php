@@ -4,13 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
-use App\Http\Requests\SignupRequest;
 use App\Http\Resources\UserAccount;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
@@ -22,7 +20,7 @@ class AuthController extends Controller
 
             // Return a response with the user data and API token
             return response()->json([
-                'user' => $user,
+                'user' => new UserAccount($user),
                 'access_token' => $token,
                 'token_type' => 'Bearer',
             ]);
@@ -40,13 +38,13 @@ class AuthController extends Controller
     public function register(RegisterRequest $request)
     {
         // NOTE: Password hashing is done in User Model
-
+        $request['id'] = Str::uuid();
         if ($request->photo_url) {
             $filename = $request->photo_url->store('users');
             $request['photo_path'] = $filename;
         }
         $user = User::create($request->except('photo_url'));
         $token = $user->createToken('API Token')->plainTextToken;
-        return response()->json(['user' => new UserAccount($user), 'token' => $token, 'token_type' => 'Bearer'], 201);
+        return response()->json(['user' => new UserAccount($user), 'access_token' => $token, 'token_type' => 'Bearer'], 201);
     }
 }

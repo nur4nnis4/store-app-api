@@ -2,14 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\SignupRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserAccount;
 use App\Http\Resources\UserDetailResource;
 use App\Http\Resources\UserResource;
 use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
