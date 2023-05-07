@@ -46,7 +46,7 @@ class UserController extends Controller
     public function destroy(String $id)
     {
         $user = User::findOrFail($id);
-        Storage::delete([$user->image_url]);
+        if ($user->photo_path && Storage::exists($user->photo_path)) Storage::delete([$user->photo_path]);
         $user->delete();
         return response()->json(['message' => 'success']);
     }

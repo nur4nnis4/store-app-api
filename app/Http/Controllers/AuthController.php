@@ -6,9 +6,11 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Resources\UserAccount;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
 {
@@ -26,8 +28,38 @@ class AuthController extends Controller
             ]);
         } else {
             // Return an error response
-            return response()->json(['message' => 'Invalid email or password'], 401);
+            return response()->json(['message' => 'The email or password you entered did not match our records. Please double check and try again'], 401);
         }
+    }
+
+    public function googleAuth(Request $request)
+    {
+        $request->validate([
+            'access_token' => 'required',
+        ]);
+
+        $user = Socialite::driver('google')->stateless()->userFromToken($request->access_token);
+
+
+        // Getting or creating user from db
+        $userFromDb = User::firstOrCreate(
+            ['email' => $user->getEmail()],
+            [
+                'id' => Str::uuid(),
+                'email_verified_at' => Carbon::now(),
+                'name' => $user->getName() ?? 'unknown',
+                'photo_path' => $user->getAvatar(),
+                'password' => Str::random(8),
+            ]
+        );
+
+        $token = $userFromDb->createToken('API Token')->plainTextToken;
+
+        return response()->json([
+            'user' => new UserAccount($userFromDb),
+            'access_token' => $token,
+            'token_type' => 'Bearer',
+        ]);
     }
 
     public function logout(Request $request)

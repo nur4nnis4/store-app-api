@@ -40,6 +40,7 @@ class User extends Authenticatable
         'phone_number',
         'password',
         'photo_path',
+        'email_verified_at',
     ];
     protected $hidden = [
         'password',

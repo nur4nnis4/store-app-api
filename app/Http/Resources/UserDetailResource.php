@@ -20,7 +20,7 @@ class UserDetailResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'address' => $this->address,
-            'photo_url' => $this->photo_path ? Storage::url('app/public/' . $this->photo_path) : Storage::url('app/public/default/user.jpg'),
+            'photo_url' => $this->photo_path ? (Storage::exists($this->photo_path) ? Storage::url('app/public/' . $this->photo_path) : $this->photo_path) : Storage::url('app/public/default/user.jpg'),
             'joined_at' => $this->created_at,
             'products' => ProductResource::collection($this->whenLoaded('products')),
         ];

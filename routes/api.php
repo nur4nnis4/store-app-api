@@ -6,8 +6,8 @@ use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/google-auth', [AuthController::class, 'googleAuth']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::get('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
