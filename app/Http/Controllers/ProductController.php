@@ -30,6 +30,24 @@ class ProductController extends Controller
         return new ProductResource($product->loadMissing('seller:id,name,photo_path,address'));
     }
 
+    public function search($keyword)
+    {
+        $products = Product::where('name', 'like', "%$keyword%")
+            ->orWhere('description', 'like', "%$keyword%")
+            ->get();
+        if ($products) {
+            return ProductResource::collection($products->loadMissing('seller:id,name,photo_path,address'));
+        }
+    }
+
+    public function getByCategory($category)
+    {
+        $products = Product::where('category', 'like', "%$category%")->get();
+        if ($products) {
+            return ProductResource::collection($products->loadMissing('seller:id,name,photo_path,address'));
+        }
+    }
+
     public function store(StoreProductRequest $request)
     {
         $request['id'] = Str::uuid();

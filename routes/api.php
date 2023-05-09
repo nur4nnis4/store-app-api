@@ -25,6 +25,8 @@ Route::controller(ProductController::class)->group(function () {
     Route::get('/products', 'index');
     Route::get('/products/{id}', 'show');
     Route::get('/products-popular', 'showPopular');
+    Route::get('/products/search/{keyword}', 'search');
+    Route::get('/products/category/{category}', 'getByCategory');
 
     Route::middleware(['auth:sanctum'])->group(function () {
 
