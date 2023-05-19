@@ -23,8 +23,13 @@ Route::controller(UserController::class)->group(function () {
 });
 Route::controller(ProductController::class)->group(function () {
     Route::get('/products', 'index');
+
+    // For conflicting routes like (/products/popular and /products/{id} )
+    // Place the more specific routes before the general ones to ensure they are matched first.
+    Route::get('/products/popular', 'showPopular');
     Route::get('/products/{id}', 'show');
-    Route::get('/products-popular', 'showPopular');
+    // ----------------------------------------------------------------------------------------
+
     Route::get('/products/search/{keyword}', 'search');
     Route::get('/products/category/{category}', 'getByCategory');
 
