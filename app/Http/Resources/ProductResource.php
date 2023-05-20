@@ -26,6 +26,7 @@ class ProductResource extends JsonResource
             'is_popular' => $this->is_popular == 1 ? true : false,
             'stock' => (int) $this->stock,
             'sales' => (int) $this->sales,
+            'created_at' => $this->created_at,
             'seller' => new UserResource($this->whenLoaded('seller')),
         ];
     }

@@ -6,21 +6,39 @@ use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
 
-    public function index()
+    private function extractOptionsFromRequest(Request $request)
     {
-        $products = Product::latest()->get();
+        $limit = $request->query('limit', 10);
+        $page = $request->query('page', 1);
+        $orderBy = $request->query('orderBy', 'created_at');
+        $sort = $request->query('sort', 'desc');
+
+        return [$limit, $page, $orderBy, $sort];
+    }
+
+    public function index(Request $request)
+    {
+
+        [$limit, $page, $orderBy, $sort] = $this->extractOptionsFromRequest($request);
+
+        $products = Product::orderBy($orderBy, $sort)
+            ->paginate($limit, ['*'], 'page', $page);
         return ProductResource::collection($products->loadMissing('seller:id,name,photo_path,address'));
     }
 
-    public function showPopular()
+    public function showPopular(Request $request)
     {
-        $popularProducts = Product::where('is_popular', 1)->get();
+        [$limit, $page, $orderBy, $sort] = $this->extractOptionsFromRequest($request);
+
+        $popularProducts = Product::where('is_popular', 1)->orderBy($orderBy, $sort)
+            ->paginate($limit, ['*'], 'page', $page);;
         return ProductResource::collection($popularProducts->loadMissing('seller:id,name,photo_path,address'));
     }
 
@@ -30,19 +48,24 @@ class ProductController extends Controller
         return new ProductResource($product->loadMissing('seller:id,name,photo_path,address'));
     }
 
-    public function search($keyword)
+    public function search(Request $request, $keyword)
     {
+        [$limit, $page, $orderBy, $sort] = $this->extractOptionsFromRequest($request);
+
         $products = Product::where('name', 'like', "%$keyword%")
             ->orWhere('description', 'like', "%$keyword%")
-            ->get();
+            ->orderBy($orderBy, $sort)->paginate($limit, ['*'], 'page', $page);
         if ($products) {
             return ProductResource::collection($products->loadMissing('seller:id,name,photo_path,address'));
         }
     }
 
-    public function getByCategory($category)
+    public function getByCategory(Request $request, $category)
     {
-        $products = Product::where('category', 'like', "%$category%")->get();
+        [$limit, $page, $orderBy, $sort] = $this->extractOptionsFromRequest($request);
+
+        $products = Product::where('category', 'like', "%$category%")->orderBy($orderBy, $sort)
+            ->paginate($limit, ['*'], 'page', $page);
         if ($products) {
             return ProductResource::collection($products->loadMissing('seller:id,name,photo_path,address'));
         }
